@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.bundles.api)
-    implementation (libs.hilt.android)
+    implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.glide.compose)
     implementation(libs.androidx.hilt.navigation.compose)
