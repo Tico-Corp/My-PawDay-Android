@@ -325,3 +325,8 @@ val darkYellowCreamy = Color(0xFFFFDF4A)
 val darkYellowCreamyButtermilk = Color(0xFFFFEB8E)
 val darkYellowLightGoldenrod = Color(0xFFFFF4B8)
 val darkYellowShinyGold = Color(0xFFFFF9D8)
+
+val lightRed = Color(0xFFFF7E83)
+val comfortingGreenYellow = Color(0xFFB3D458)
+val yellowShinyGold = Color(0xFFFFDF4A)
+val splashyBlue = Color(0xFFA6CFFF)
