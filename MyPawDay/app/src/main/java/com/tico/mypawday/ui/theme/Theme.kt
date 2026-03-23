@@ -257,6 +257,10 @@ data class CustomColorScheme(
     val yellowCreamyButtermilk: Color = Color.Unspecified,
     val yellowLightGoldenrod: Color = Color.Unspecified,
     val yellowShinyGold: Color = Color.Unspecified,
+    val yellowish: Color = Color.Unspecified,
+    val lightRed: Color = Color.Unspecified,
+    val comfortingGreenYellow: Color = Color.Unspecified,
+    val splashyBlue: Color = Color.Unspecified,
 )
 
 private val LightCustomColors = CustomColorScheme(
@@ -270,6 +274,10 @@ private val LightCustomColors = CustomColorScheme(
     yellowCreamyButtermilk = lightYellowCreamyButtermilk,
     yellowLightGoldenrod = lightYellowLightGoldenrod,
     yellowShinyGold = lightYellowShinyGold,
+    yellowish = yellowish,
+    lightRed = lightRed,
+    comfortingGreenYellow = comfortingGreenYellow,
+    splashyBlue = splashyBlue,
 )
 
 val LocalCustomColorScheme = staticCompositionLocalOf { CustomColorScheme() }
@@ -285,6 +293,10 @@ private val DarkCustomColors = CustomColorScheme(
     yellowCreamyButtermilk = darkYellowCreamyButtermilk,
     yellowLightGoldenrod = darkYellowLightGoldenrod,
     yellowShinyGold = darkYellowShinyGold,
+    yellowish = yellowish,
+    lightRed = lightRed,
+    comfortingGreenYellow = comfortingGreenYellow,
+    splashyBlue = splashyBlue,
 )
 
 @Composable

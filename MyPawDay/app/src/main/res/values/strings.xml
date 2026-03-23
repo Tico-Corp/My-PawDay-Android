@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyPawDay</string>
+    <string name="content_kakao_login">카카오 로그인</string>
+    <string name="content_ic_logo">멍냥의 하루 로고</string>
 </resources>
