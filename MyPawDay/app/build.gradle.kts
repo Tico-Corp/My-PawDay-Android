@@ -46,7 +46,7 @@ dependencies {
 
     implementation(libs.bundles.androidx)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.material3)
+    implementation(libs.bundles.material3)
     implementation(libs.bundles.api)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
