@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.tico.mypawday.R
+import com.tico.mypawday.ui.theme.MyPawDayDimens
 import com.tico.mypawday.ui.theme.MyPawDayTheme
 
 @Composable
@@ -28,16 +29,12 @@ fun SplashScreen(
         contentAlignment = Alignment.Center,
     ) {
         val compactHeight = isCompactHeight ?: (maxHeight < 480.dp)
+        val splashDimens = MyPawDayDimens.splash(maxWidth)
 
         val imageModifier = if (compactHeight) {
-            Modifier.fillMaxHeight(0.7f)
+            Modifier.fillMaxHeight(splashDimens.logoHeightFraction)
         } else {
-            val widthFraction = when {
-                maxWidth >= 840.dp -> 0.35f
-                maxWidth >= 600.dp -> 0.45f
-                else -> 0.65f
-            }
-            Modifier.fillMaxWidth(widthFraction)
+            Modifier.fillMaxWidth(splashDimens.logoWidthFraction)
         }
 
         Image(

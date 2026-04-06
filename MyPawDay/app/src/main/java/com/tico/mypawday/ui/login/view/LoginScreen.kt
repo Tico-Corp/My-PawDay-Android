@@ -25,6 +25,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.tico.mypawday.R
+import com.tico.mypawday.ui.theme.MyPawDayDimens
 import com.tico.mypawday.ui.theme.MyPawDayTheme
 
 @Composable
@@ -38,12 +39,7 @@ fun LoginScreen(
             .background(MaterialTheme.colorScheme.background),
     ) {
         val compactHeight = isCompactHeight ?: (maxHeight < 480.dp)
-
-        val contentWidthFraction = when {
-            maxWidth >= 840.dp -> 0.5f
-            maxWidth >= 600.dp -> 0.65f
-            else -> 1f
-        }
+        val loginDimens = MyPawDayDimens.login(maxWidth)
 
         if (compactHeight) {
             LoginScreenLandscape(
@@ -52,7 +48,7 @@ fun LoginScreen(
         } else {
             LoginScreenPortrait(
                 onKakaoLoginClick = onKakaoLoginClick,
-                contentWidthFraction = contentWidthFraction,
+                contentWidthFraction = loginDimens.contentWidthFraction,
             )
         }
     }
