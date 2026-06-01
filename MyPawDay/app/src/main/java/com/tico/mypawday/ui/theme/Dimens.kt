@@ -30,12 +30,6 @@ data class FilterChipDimens(
 )
 
 @Immutable
-data class ContentPaddingDimens(
-    val contentVerticalPadding: Dp = 18.dp,
-    val contentHorizontalPadding: Dp = 18.dp,
-)
-
-@Immutable
 data class SplashDimens(
     val logoWidthFraction: Float = 0.65f,
     val logoHeightFraction: Float = 0.7f,
@@ -48,14 +42,17 @@ data class LoginDimens(
 
 object MyPawDayDimens {
 
+    val tabletMinWidth = 600.dp
+    val largeTabletMinWidth = 840.dp
+
     @Composable
     fun topBar(maxWidth: Dp): TopBarDimens = when {
-        maxWidth >= 840.dp -> TopBarDimens(
+        maxWidth >= largeTabletMinWidth -> TopBarDimens(
             myPageIconSize = 63.dp,
             logoHeight = 63.dp,
         )
 
-        maxWidth >= 600.dp -> TopBarDimens(
+        maxWidth >= tabletMinWidth -> TopBarDimens(
             myPageIconSize = 63.dp,
             logoHeight = 63.dp,
         )
@@ -65,14 +62,14 @@ object MyPawDayDimens {
 
     @Composable
     fun fab(maxWidth: Dp): FabDimens = when {
-        maxWidth >= 840.dp -> FabDimens(
+        maxWidth >= largeTabletMinWidth -> FabDimens(
             mainFabSize = 82.dp,
             subFabSize = 56.dp,
             mainIconSize = 48.dp,
             subIconSize = 42.dp,
         )
 
-        maxWidth >= 600.dp -> FabDimens(
+        maxWidth >= tabletMinWidth -> FabDimens(
             mainFabSize = 74.dp,
             subFabSize = 52.dp,
             mainIconSize = 44.dp,
@@ -83,43 +80,28 @@ object MyPawDayDimens {
     }
 
     @Composable
-    fun contentPadding(maxWidth: Dp): ContentPaddingDimens = when {
-        maxWidth >= 840.dp -> ContentPaddingDimens(
-            contentVerticalPadding = 24.dp,
-            contentHorizontalPadding = 24.dp,
-        )
-
-        maxWidth >= 600.dp -> ContentPaddingDimens(
-            contentVerticalPadding = 18.dp,
-            contentHorizontalPadding = 18.dp,
-        )
-
-        else -> ContentPaddingDimens()
-    }
-
-    @Composable
     fun splash(maxWidth: Dp): SplashDimens = when {
-        maxWidth >= 840.dp -> SplashDimens(logoWidthFraction = 0.35f)
-        maxWidth >= 600.dp -> SplashDimens(logoWidthFraction = 0.45f)
+        maxWidth >= largeTabletMinWidth -> SplashDimens(logoWidthFraction = 0.35f)
+        maxWidth >= tabletMinWidth -> SplashDimens(logoWidthFraction = 0.45f)
         else -> SplashDimens()
     }
 
     @Composable
     fun login(maxWidth: Dp): LoginDimens = when {
-        maxWidth >= 840.dp -> LoginDimens(contentWidthFraction = 0.5f)
-        maxWidth >= 600.dp -> LoginDimens(contentWidthFraction = 0.65f)
+        maxWidth >= largeTabletMinWidth -> LoginDimens(contentWidthFraction = 0.5f)
+        maxWidth >= tabletMinWidth -> LoginDimens(contentWidthFraction = 0.65f)
         else -> LoginDimens()
     }
 
     @Composable
     fun filterChip(maxWidth: Dp): FilterChipDimens = when {
-        maxWidth >= 840.dp -> FilterChipDimens(
+        maxWidth >= largeTabletMinWidth -> FilterChipDimens(
             textStyle = MyPawDayTypography.robotoRegular16,
             spacing = 12.dp,
             dropdownIconSize = 23.dp,
         )
 
-        maxWidth >= 600.dp -> FilterChipDimens(
+        maxWidth >= tabletMinWidth -> FilterChipDimens(
             textStyle = MyPawDayTypography.robotoRegular14,
             spacing = 10.dp,
             dropdownIconSize = 21.dp,
