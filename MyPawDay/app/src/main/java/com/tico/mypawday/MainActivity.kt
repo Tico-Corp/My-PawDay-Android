@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import com.tico.mypawday.ui.main.view.MainScreen
 import com.tico.mypawday.ui.theme.MyPawDayTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +19,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this@MainActivity)
             val isCompactHeight =
-                windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+                windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact &&
+                        windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact
             MyPawDayTheme {
             }
         }
