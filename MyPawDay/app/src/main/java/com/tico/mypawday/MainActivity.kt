@@ -8,6 +8,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import com.tico.mypawday.ui.main.view.MainScreen
 import com.tico.mypawday.ui.theme.MyPawDayTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
                 windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact &&
                         windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact
             MyPawDayTheme {
+                MainScreen(isCompactHeight = isCompactHeight, onMyPageClick = {})
             }
         }
     }

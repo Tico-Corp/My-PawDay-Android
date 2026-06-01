@@ -1,6 +1,5 @@
 package com.tico.mypawday.ui.main.view.component
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,12 +20,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import com.tico.mypawday.R
 import com.tico.mypawday.ui.icons.MyPawDayIcons
 import com.tico.mypawday.ui.main.view.model.CalendarDay
 import com.tico.mypawday.ui.main.view.model.PetCondition
 import com.tico.mypawday.ui.theme.MyPawDayTypography
-
 
 private const val CELL_CONTENT_FILL = 0.85f
 
@@ -56,14 +56,13 @@ fun CalendarDayCell(
         }
 
         when {
-            day.petImageRes != null -> {
-                Image(
-                    painter = painterResource(day.petImageRes),
-                    contentDescription = null,
+            day.petImageUrl != null -> {
+                GlideImage(
+                    imageModel = { day.petImageUrl },
                     modifier = Modifier
                         .fillMaxSize(CELL_CONTENT_FILL)
                         .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
+                    imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 )
             }
 
