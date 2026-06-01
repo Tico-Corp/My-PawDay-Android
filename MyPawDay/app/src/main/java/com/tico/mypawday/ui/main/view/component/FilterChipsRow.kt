@@ -15,6 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import com.tico.mypawday.R
 import com.tico.mypawday.ui.icons.MyPawDayIcons
@@ -73,52 +75,61 @@ fun FilterChipsRow(
             contentPadding = chipContentPadding,
         )
 
-        FilterChip(
-            selected = DiaryType.WALK in selectedFilters,
-            onClick = { onFilterToggle(DiaryType.WALK) },
-            label = {
-                Text(
-                    stringResource(R.string.category_walk),
-                    style = dimens.textStyle,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-            },
-            shape = chipShape,
-            border = FilterChipDefaults.filterChipBorder(
-                enabled = true,
-                selected = DiaryType.WALK in selectedFilters,
+        DiaryType.entries.forEach { type ->
+            DiaryTypeFilterChip(
+                type = type,
+                selected = type in selectedFilters,
+                onClick = { onFilterToggle(type) },
+                dimens = dimens,
+                chipShape = chipShape,
                 borderColor = borderColor,
-                selectedBorderColor = borderColor,
-            ),
-            colors = FilterChipDefaults.filterChipColors(
                 containerColor = containerColor,
                 selectedContainerColor = selectedContainerColor,
-            ),
-            contentPadding = chipContentPadding,
-        )
-
-        FilterChip(
-            selected = DiaryType.HOSPITAL in selectedFilters,
-            onClick = { onFilterToggle(DiaryType.HOSPITAL) },
-            label = {
-                Text(
-                    stringResource(R.string.category_hospital),
-                    style = dimens.textStyle,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-            },
-            shape = chipShape,
-            border = FilterChipDefaults.filterChipBorder(
-                enabled = true,
-                selected = DiaryType.HOSPITAL in selectedFilters,
-                borderColor = borderColor,
-                selectedBorderColor = borderColor,
-            ),
-            colors = FilterChipDefaults.filterChipColors(
-                containerColor = containerColor,
-                selectedContainerColor = selectedContainerColor,
-            ),
-            contentPadding = chipContentPadding,
-        )
+                chipContentPadding = chipContentPadding,
+            )
+        }
     }
+}
+
+@Composable
+private fun DiaryTypeFilterChip(
+    type: DiaryType,
+    selected: Boolean,
+    onClick: () -> Unit,
+    dimens: FilterChipDimens,
+    chipShape: Shape,
+    borderColor: Color,
+    containerColor: Color,
+    selectedContainerColor: Color,
+    chipContentPadding: PaddingValues,
+) {
+    val label = stringResource(
+        when (type) {
+            DiaryType.WALK -> R.string.category_walk
+            DiaryType.HOSPITAL -> R.string.category_hospital
+        },
+    )
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = {
+            Text(
+                label,
+                style = dimens.textStyle,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        },
+        shape = chipShape,
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = selected,
+            borderColor = borderColor,
+            selectedBorderColor = borderColor,
+        ),
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = containerColor,
+            selectedContainerColor = selectedContainerColor,
+        ),
+        contentPadding = chipContentPadding,
+    )
 }
