@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -37,10 +38,12 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tico.mypawday.ui.main.view.component.CalendarSection
+import com.tico.mypawday.ui.main.view.component.DiaryCardItem
 import com.tico.mypawday.ui.main.view.component.ExpandableFab
 import com.tico.mypawday.ui.main.view.component.FilterChipsRow
 import com.tico.mypawday.ui.main.view.component.MainTopBar
 import com.tico.mypawday.ui.main.view.model.CalendarDay
+import com.tico.mypawday.ui.main.view.model.DiaryCard
 import com.tico.mypawday.ui.main.view.model.DiaryType
 import com.tico.mypawday.ui.theme.FilterChipDimens
 import com.tico.mypawday.ui.theme.MyPawDayDimens
@@ -67,6 +70,13 @@ fun MainScreen(
 
     val calendarDays = remember(currentYear, currentMonth) {
         generateCalendarDays(currentYear, currentMonth).applyDummyData(today)
+    }
+
+    var diaryCards by remember { mutableStateOf(generateDummyCards()) }
+
+    val filteredCards = remember(diaryCards, selectedFilters) {
+        if (selectedFilters.isEmpty()) diaryCards
+        else diaryCards.filter { it.type in selectedFilters }
     }
 
     val onPreviousMonth: () -> Unit = remember(currentYear, currentMonth) {
@@ -110,6 +120,9 @@ fun MainScreen(
             }
         }
     }
+    val onDeleteCard: (DiaryCard) -> Unit = remember {
+        { card -> diaryCards = diaryCards.filter { it.id != card.id } }
+    }
 
     BoxWithConstraints(
         modifier = modifier
@@ -125,6 +138,7 @@ fun MainScreen(
         if (useLandscapeLayout) {
             MainScreenLandscape(
                 onMyPageClick = onMyPageClick,
+                filteredCards = filteredCards,
                 calendarDays = calendarDays,
                 currentYear = currentYear,
                 currentMonth = currentMonth,
@@ -136,6 +150,7 @@ fun MainScreen(
                 onTodayClick = onTodayClick,
                 onDayClick = onDayClick,
                 onFilterToggle = onFilterToggle,
+                onDeleteCard = onDeleteCard,
                 topBarDimens = topBarDimens,
                 chipDimens = chipDimens,
                 fillCalendarHeight = compactHeight,
@@ -143,6 +158,7 @@ fun MainScreen(
         } else {
             MainScreenPortrait(
                 onMyPageClick = onMyPageClick,
+                filteredCards = filteredCards,
                 calendarDays = calendarDays,
                 currentYear = currentYear,
                 currentMonth = currentMonth,
@@ -154,6 +170,7 @@ fun MainScreen(
                 onTodayClick = onTodayClick,
                 onDayClick = onDayClick,
                 onFilterToggle = onFilterToggle,
+                onDeleteCard = onDeleteCard,
                 topBarDimens = topBarDimens,
                 chipDimens = chipDimens,
             )
@@ -178,6 +195,7 @@ fun MainScreen(
 @Composable
 private fun MainScreenPortrait(
     onMyPageClick: () -> Unit,
+    filteredCards: List<DiaryCard>,
     calendarDays: List<CalendarDay>,
     currentYear: Int,
     currentMonth: Int,
@@ -189,6 +207,7 @@ private fun MainScreenPortrait(
     onTodayClick: () -> Unit,
     onDayClick: (CalendarDay) -> Unit,
     onFilterToggle: (DiaryType) -> Unit,
+    onDeleteCard: (DiaryCard) -> Unit,
     topBarDimens: TopBarDimens = TopBarDimens(),
     chipDimens: FilterChipDimens = FilterChipDimens(),
 ) {
@@ -231,12 +250,23 @@ private fun MainScreenPortrait(
                 onDayClick = onDayClick,
             )
         }
+
+        items(
+            items = filteredCards,
+            key = { it.id },
+        ) { card ->
+            DiaryCardItem(
+                card = card,
+                onDelete = { onDeleteCard(card) },
+            )
+        }
     }
 }
 
 @Composable
 private fun MainScreenLandscape(
     onMyPageClick: () -> Unit,
+    filteredCards: List<DiaryCard>,
     calendarDays: List<CalendarDay>,
     currentYear: Int,
     currentMonth: Int,
@@ -248,6 +278,7 @@ private fun MainScreenLandscape(
     onTodayClick: () -> Unit,
     onDayClick: (CalendarDay) -> Unit,
     onFilterToggle: (DiaryType) -> Unit,
+    onDeleteCard: (DiaryCard) -> Unit,
     topBarDimens: TopBarDimens = TopBarDimens(),
     chipDimens: FilterChipDimens = FilterChipDimens(),
     fillCalendarHeight: Boolean = false,
@@ -333,6 +364,27 @@ private fun MainScreenLandscape(
                         onFilterToggle = onFilterToggle,
                         dimens = chipDimens,
                     )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(
+                            items = filteredCards,
+                            key = { it.id },
+                        ) { card ->
+                            DiaryCardItem(
+                                card = card,
+                                onDelete = { onDeleteCard(card) },
+                            )
+                        }
+
+                        item { Spacer(modifier = Modifier.height(80.dp)) }
+                    }
                 }
             }
         }
