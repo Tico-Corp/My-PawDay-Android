@@ -20,7 +20,7 @@ data class CalendarDay(
     val isCurrentMonth: Boolean,
     val condition: PetCondition? = null,
     val hasHospital: Boolean = false,
-    val petImageRes: Int? = null,
+    val petImageUrl: String? = null,
 )
 
 data class DiaryCard(
@@ -28,8 +28,8 @@ data class DiaryCard(
     val type: DiaryType,
     val startTime: String,
     val endTime: String? = null,
-    val fee: String? = null,
+    val fee: Long? = null,
     val pets: List<String>,
     val description: String,
-    val photoRes: Int? = null,
+    val photoUrl: String? = null,
 )
