@@ -40,6 +40,20 @@ data class LoginDimens(
     val contentWidthFraction: Float = 1f,
 )
 
+@Immutable
+data class DialogDimens(
+    val titleStyle: TextStyle = MyPawDayTypography.robotoRegular18,
+    val buttonStyle: TextStyle = MyPawDayTypography.robotoRegular16,
+    val horizontalPadding: Dp = 40.dp,
+    val verticalPadding: Dp = 50.dp,
+    val titleButtonSpacing: Dp = 25.dp,
+    val buttonSpacing: Dp = 56.dp,
+    val cornerRadius: Dp = 20.dp,
+    val buttonCornerRadius: Dp = 10.dp,
+    val buttonHorizontalPadding: Dp = 20.dp,
+    val buttonVerticalPadding: Dp = 14.dp,
+)
+
 object MyPawDayDimens {
 
     val tabletMinWidth = 600.dp
@@ -108,5 +122,36 @@ object MyPawDayDimens {
         )
 
         else -> FilterChipDimens()
+    }
+
+    @Composable
+    fun dialog(screenWidth: Dp): DialogDimens = when {
+        screenWidth >= largeTabletMinWidth -> DialogDimens(
+            titleStyle = MyPawDayTypography.robotoRegular24,
+            buttonStyle = MyPawDayTypography.robotoRegular18,
+            horizontalPadding = 56.dp,
+            verticalPadding = 64.dp,
+            titleButtonSpacing = 32.dp,
+            buttonSpacing = 72.dp,
+            cornerRadius = 24.dp,
+            buttonCornerRadius = 12.dp,
+            buttonHorizontalPadding = 28.dp,
+            buttonVerticalPadding = 18.dp,
+        )
+
+        screenWidth >= tabletMinWidth -> DialogDimens(
+            titleStyle = MyPawDayTypography.robotoRegular20,
+            buttonStyle = MyPawDayTypography.robotoRegular16,
+            horizontalPadding = 48.dp,
+            verticalPadding = 56.dp,
+            titleButtonSpacing = 28.dp,
+            buttonSpacing = 64.dp,
+            cornerRadius = 22.dp,
+            buttonCornerRadius = 11.dp,
+            buttonHorizontalPadding = 24.dp,
+            buttonVerticalPadding = 16.dp,
+        )
+
+        else -> DialogDimens()
     }
 }
