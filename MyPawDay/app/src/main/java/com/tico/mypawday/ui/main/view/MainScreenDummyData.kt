@@ -3,6 +3,7 @@ package com.tico.mypawday.ui.main.view
 import com.tico.mypawday.ui.main.view.model.CalendarDay
 import com.tico.mypawday.ui.main.view.model.DiaryCard
 import com.tico.mypawday.ui.main.view.model.DiaryType
+import com.tico.mypawday.ui.main.view.model.Pet
 import com.tico.mypawday.ui.main.view.model.PetCondition
 import kotlinx.datetime.LocalDate
 
@@ -31,6 +32,15 @@ internal fun isDummyHospitalDay(date: LocalDate, today: LocalDate): Boolean {
     if (date > today) return false
     return date.dayOfMonth % 10 == 3
 }
+
+internal fun generateDummyPets(): List<Pet> = listOf(
+    Pet(id = 1, name = "뽀삐"),
+    Pet(id = 2, name = "코코"),
+    Pet(id = 3, name = "차돌"),
+    Pet(id = 4, name = "초코"),
+    Pet(id = 5, name = "모카"),
+    Pet(id = 6, name = "커피"),
+)
 
 internal fun generateDummyCards(): List<DiaryCard> = listOf(
     DiaryCard(
