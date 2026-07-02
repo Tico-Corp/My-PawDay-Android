@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">MyPawDay</string>
 
+    <!--Common -->
+    <string name="btn_apply">적용하기</string>
+
     <!-- Login -->
     <string name="content_kakao_login">카카오 로그인</string>
     <string name="content_ic_logo">멍냥의 하루 로고</string>
@@ -39,4 +42,8 @@
     <string name="title_delete_confirm">삭제 하시겠습니까?</string>
     <string name="content_cancel">취소</string>
     <string name="content_delete_action">삭제하기</string>
+
+    <!-- Pet Filter Bottom Sheet -->
+    <string name="content_pet_profile">반려동물 프로필</string>
+    <string name="content_ellipsis">...</string>
 </resources>
