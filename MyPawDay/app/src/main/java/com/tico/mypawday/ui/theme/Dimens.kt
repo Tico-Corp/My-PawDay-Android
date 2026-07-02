@@ -25,7 +25,7 @@ data class FilterChipDimens(
     val textStyle: TextStyle = MyPawDayTypography.robotoRegular14,
     val spacing: Dp = 8.dp,
     val dropdownIconSize: Dp = 19.dp,
-    val verticalPadding: Dp = 0.dp,
+    val verticalPadding: Dp = 3.dp,
     val horizontalPadding: Dp = 10.dp,
 )
 
@@ -38,6 +38,21 @@ data class SplashDimens(
 @Immutable
 data class LoginDimens(
     val contentWidthFraction: Float = 1f,
+)
+
+@Immutable
+data class PetFilterSheetDimens(
+    val profileImageSize: Dp = 80.dp,
+    val petItemWidth: Dp = 97.dp,
+    val petNameStyle: TextStyle = MyPawDayTypography.robotoRegular12,
+    val itemCornerRadius: Dp = 12.dp,
+    val itemVerticalPadding: Dp = 10.dp,
+    val itemContentSpacing: Dp = 8.dp,
+    val buttonHeight: Dp = 47.dp,
+    val buttonCornerRadius: Dp = 12.dp,
+    val contentHorizontalPadding: Dp = 18.dp,
+    val contentVerticalPadding: Dp = 20.dp,
+    val itemSpacing: Dp = 5.dp,
 )
 
 @Immutable
@@ -122,6 +137,39 @@ object MyPawDayDimens {
         )
 
         else -> FilterChipDimens()
+    }
+
+    @Composable
+    fun petFilterSheet(maxWidth: Dp): PetFilterSheetDimens = when {
+        maxWidth >= largeTabletMinWidth -> PetFilterSheetDimens(
+            profileImageSize = 112.dp,
+            petItemWidth = 130.dp,
+            petNameStyle = MyPawDayTypography.robotoRegular16,
+            itemCornerRadius = 16.dp,
+            itemVerticalPadding = 14.dp,
+            itemContentSpacing = 12.dp,
+            buttonHeight = 60.dp,
+            buttonCornerRadius = 16.dp,
+            contentHorizontalPadding = 28.dp,
+            contentVerticalPadding = 28.dp,
+            itemSpacing = 9.dp,
+        )
+
+        maxWidth >= tabletMinWidth -> PetFilterSheetDimens(
+            profileImageSize = 96.dp,
+            petItemWidth = 115.dp,
+            petNameStyle = MyPawDayTypography.robotoRegular14,
+            itemCornerRadius = 14.dp,
+            itemVerticalPadding = 12.dp,
+            itemContentSpacing = 10.dp,
+            buttonHeight = 54.dp,
+            buttonCornerRadius = 14.dp,
+            contentHorizontalPadding = 24.dp,
+            contentVerticalPadding = 24.dp,
+            itemSpacing = 7.dp,
+        )
+
+        else -> PetFilterSheetDimens()
     }
 
     @Composable
