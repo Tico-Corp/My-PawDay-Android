@@ -3,25 +3,30 @@ package com.tico.mypawday.ui.main.view.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.InputChip
-import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.tico.mypawday.R
 import com.tico.mypawday.ui.icons.MyPawDayIcons
 import com.tico.mypawday.ui.main.view.model.DiaryType
+import com.tico.mypawday.ui.main.view.model.Pet
 import com.tico.mypawday.ui.theme.FilterChipDimens
+
+private val PET_CHIP_IMAGE_SIZE = 20.dp
+private val PET_CHIP_OVERLAP_OFFSET = 14.dp
 
 @Composable
 fun FilterChipsRow(
@@ -29,6 +34,8 @@ fun FilterChipsRow(
     onFilterToggle: (DiaryType) -> Unit,
     dimens: FilterChipDimens,
     modifier: Modifier = Modifier,
+    onPetFilterClick: () -> Unit = {},
+    selectedPets: List<Pet> = emptyList(),
 ) {
     val chipShape = CircleShape
     val chipContentPadding = PaddingValues(
@@ -43,36 +50,17 @@ fun FilterChipsRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(dimens.spacing),
         verticalArrangement = Arrangement.spacedBy(dimens.spacing),
+        itemVerticalAlignment = Alignment.CenterVertically
     ) {
-        InputChip(
-            selected = false,
-            onClick = { /* TODO: 펫 필터 바텀시트 */ },
-            label = {
-                Text(
-                    stringResource(R.string.category_pet),
-                    style = dimens.textStyle,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = MyPawDayIcons.IcArrowDropDown,
-                    contentDescription = null,
-                    modifier = Modifier.size(dimens.dropdownIconSize),
-                )
-            },
-            shape = chipShape,
-            border = InputChipDefaults.inputChipBorder(
-                enabled = true,
-                selected = false,
-                borderColor = borderColor,
-                selectedBorderColor = borderColor,
-            ),
-            colors = InputChipDefaults.inputChipColors(
-                containerColor = containerColor,
-                selectedContainerColor = selectedContainerColor,
-            ),
-            contentPadding = chipContentPadding,
+        PetFilterChip(
+            selectedPets = selectedPets,
+            onClick = onPetFilterClick,
+            dimens = dimens,
+            chipShape = chipShape,
+            borderColor = borderColor,
+            containerColor = containerColor,
+            selectedContainerColor = selectedContainerColor,
+            chipContentPadding = chipContentPadding,
         )
 
         DiaryType.entries.forEach { type ->
@@ -86,6 +74,82 @@ fun FilterChipsRow(
                 containerColor = containerColor,
                 selectedContainerColor = selectedContainerColor,
                 chipContentPadding = chipContentPadding,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PetFilterChip(
+    selectedPets: List<Pet>,
+    onClick: () -> Unit,
+    dimens: FilterChipDimens,
+    chipShape: Shape,
+    borderColor: Color,
+    containerColor: Color,
+    selectedContainerColor: Color,
+    chipContentPadding: PaddingValues,
+) {
+    val selected = selectedPets.isNotEmpty()
+    FilterChip(
+        contentPadding = chipContentPadding,
+        onClick = onClick,
+        selected = selected,
+        label = {
+            PetFilterChipLabel(
+                selectedPets = selectedPets,
+                dimens = dimens,
+            )
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = MyPawDayIcons.IcArrowDropDown,
+                contentDescription = null,
+                modifier = Modifier.size(dimens.dropdownIconSize),
+            )
+        },
+        shape = chipShape,
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = selected,
+            borderColor = borderColor,
+            selectedBorderColor = borderColor,
+        ),
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = containerColor,
+            selectedContainerColor = selectedContainerColor,
+        ),
+    )
+}
+
+@Composable
+private fun PetFilterChipLabel(
+    selectedPets: List<Pet>,
+    dimens: FilterChipDimens,
+) {
+    if (selectedPets.isEmpty()) {
+        Text(
+            text = stringResource(R.string.category_pet),
+            style = dimens.textStyle,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        return
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OverlappingPetImages(
+            pets = selectedPets,
+            imageSize = PET_CHIP_IMAGE_SIZE,
+            overlapOffset = PET_CHIP_OVERLAP_OFFSET,
+        )
+
+        if (selectedPets.size > 3) {
+            Text(
+                text = stringResource(R.string.content_ellipsis),
+                style = dimens.textStyle,
+                color = MaterialTheme.colorScheme.onBackground,
             )
         }
     }

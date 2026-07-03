@@ -42,9 +42,11 @@ import com.tico.mypawday.ui.main.view.component.DiaryCardItem
 import com.tico.mypawday.ui.main.view.component.ExpandableFab
 import com.tico.mypawday.ui.main.view.component.FilterChipsRow
 import com.tico.mypawday.ui.main.view.component.MainTopBar
+import com.tico.mypawday.ui.main.view.component.PetFilterBottomSheet
 import com.tico.mypawday.ui.main.view.model.CalendarDay
 import com.tico.mypawday.ui.main.view.model.DiaryCard
 import com.tico.mypawday.ui.main.view.model.DiaryType
+import com.tico.mypawday.ui.main.view.model.Pet
 import com.tico.mypawday.ui.theme.FilterChipDimens
 import com.tico.mypawday.ui.theme.MyPawDayDimens
 import com.tico.mypawday.ui.theme.MyPawDayTheme
@@ -66,7 +68,11 @@ fun MainScreen(
     var currentMonth by remember { mutableIntStateOf(today.monthNumber) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(today) }
     var selectedFilters by remember { mutableStateOf(setOf<DiaryType>()) }
+    var selectedPetIds by remember { mutableStateOf(setOf<Long>()) }
+    var showPetFilter by remember { mutableStateOf(false) }
     var isFabExpanded by remember { mutableStateOf(false) }
+
+    val pets = remember { generateDummyPets() }
 
     val calendarDays = remember(currentYear, currentMonth) {
         generateCalendarDays(currentYear, currentMonth).applyDummyData(today)
@@ -74,9 +80,17 @@ fun MainScreen(
 
     var diaryCards by remember { mutableStateOf(generateDummyCards()) }
 
-    val filteredCards = remember(diaryCards, selectedFilters) {
-        if (selectedFilters.isEmpty()) diaryCards
-        else diaryCards.filter { it.type in selectedFilters }
+    val filteredCards = remember(diaryCards, selectedFilters, selectedPetIds, pets) {
+        filterDiaryCards(
+            cards = diaryCards,
+            selectedFilters = selectedFilters,
+            selectedPetIds = selectedPetIds,
+            pets = pets,
+        )
+    }
+
+    val selectedPets = remember(pets, selectedPetIds) {
+        pets.filter { it.id in selectedPetIds }
     }
 
     val onPreviousMonth: () -> Unit = remember(currentYear, currentMonth) {
@@ -120,6 +134,7 @@ fun MainScreen(
             }
         }
     }
+    val onPetFilterClick: () -> Unit = remember { { showPetFilter = true } }
     val onDeleteCard: (DiaryCard) -> Unit = remember {
         { card -> diaryCards = diaryCards.filter { it.id != card.id } }
     }
@@ -145,11 +160,13 @@ fun MainScreen(
                 selectedDate = selectedDate,
                 today = today,
                 selectedFilters = selectedFilters,
+                selectedPets = selectedPets,
                 onPreviousMonth = onPreviousMonth,
                 onNextMonth = onNextMonth,
                 onTodayClick = onTodayClick,
                 onDayClick = onDayClick,
                 onFilterToggle = onFilterToggle,
+                onPetFilterClick = onPetFilterClick,
                 onDeleteCard = onDeleteCard,
                 topBarDimens = topBarDimens,
                 chipDimens = chipDimens,
@@ -165,14 +182,28 @@ fun MainScreen(
                 selectedDate = selectedDate,
                 today = today,
                 selectedFilters = selectedFilters,
+                selectedPets = selectedPets,
                 onPreviousMonth = onPreviousMonth,
                 onNextMonth = onNextMonth,
                 onTodayClick = onTodayClick,
                 onDayClick = onDayClick,
                 onFilterToggle = onFilterToggle,
+                onPetFilterClick = onPetFilterClick,
                 onDeleteCard = onDeleteCard,
                 topBarDimens = topBarDimens,
                 chipDimens = chipDimens,
+            )
+        }
+
+        if (showPetFilter) {
+            PetFilterBottomSheet(
+                pets = pets,
+                selectedPetIds = selectedPetIds,
+                onApply = { ids ->
+                    selectedPetIds = ids
+                    showPetFilter = false
+                },
+                onDismiss = { showPetFilter = false },
             )
         }
 
@@ -202,11 +233,13 @@ private fun MainScreenPortrait(
     selectedDate: LocalDate?,
     today: LocalDate,
     selectedFilters: Set<DiaryType>,
+    selectedPets: List<Pet>,
     onPreviousMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onTodayClick: () -> Unit,
     onDayClick: (CalendarDay) -> Unit,
     onFilterToggle: (DiaryType) -> Unit,
+    onPetFilterClick: () -> Unit,
     onDeleteCard: (DiaryCard) -> Unit,
     topBarDimens: TopBarDimens = TopBarDimens(),
     chipDimens: FilterChipDimens = FilterChipDimens(),
@@ -234,6 +267,8 @@ private fun MainScreenPortrait(
                 selectedFilters = selectedFilters,
                 onFilterToggle = onFilterToggle,
                 dimens = chipDimens,
+                onPetFilterClick = onPetFilterClick,
+                selectedPets = selectedPets,
             )
         }
 
@@ -273,11 +308,13 @@ private fun MainScreenLandscape(
     selectedDate: LocalDate?,
     today: LocalDate,
     selectedFilters: Set<DiaryType>,
+    selectedPets: List<Pet>,
     onPreviousMonth: () -> Unit,
     onNextMonth: () -> Unit,
     onTodayClick: () -> Unit,
     onDayClick: (CalendarDay) -> Unit,
     onFilterToggle: (DiaryType) -> Unit,
+    onPetFilterClick: () -> Unit,
     onDeleteCard: (DiaryCard) -> Unit,
     topBarDimens: TopBarDimens = TopBarDimens(),
     chipDimens: FilterChipDimens = FilterChipDimens(),
@@ -309,9 +346,11 @@ private fun MainScreenLandscape(
             val totalWidthPx = with(density) { maxWidth.toPx() }
 
             Row(modifier = Modifier.fillMaxSize()) {
-                BoxWithConstraints(modifier = Modifier
-                    .weight(splitRatio)
-                    .fillMaxHeight()) {
+                BoxWithConstraints(
+                    modifier = Modifier
+                        .weight(splitRatio)
+                        .fillMaxHeight()
+                ) {
                     val calendarScrollState = rememberScrollState()
                     val calendarCellSize: Dp? = if (fillCalendarHeight) {
                         val weekCount = calendarDays.chunked(7)
@@ -363,6 +402,8 @@ private fun MainScreenLandscape(
                         selectedFilters = selectedFilters,
                         onFilterToggle = onFilterToggle,
                         dimens = chipDimens,
+                        onPetFilterClick = onPetFilterClick,
+                        selectedPets = selectedPets,
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -388,6 +429,25 @@ private fun MainScreenLandscape(
                 }
             }
         }
+    }
+}
+
+private fun filterDiaryCards(
+    cards: List<DiaryCard>,
+    selectedFilters: Set<DiaryType>,
+    selectedPetIds: Set<Long>,
+    pets: List<Pet>,
+): List<DiaryCard> {
+    val selectedPetNames = pets
+        .filter { it.id in selectedPetIds }
+        .map { it.name }
+        .toSet()
+
+    return cards.filter { card ->
+        val matchesType = selectedFilters.isEmpty() || card.type in selectedFilters
+        val matchesPet = selectedPetNames.isEmpty() || card.pets.any { it in selectedPetNames }
+
+        matchesType && matchesPet
     }
 }
 
