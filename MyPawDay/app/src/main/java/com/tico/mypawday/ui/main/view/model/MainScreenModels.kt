@@ -13,6 +13,7 @@ enum class DiaryType {
 data class Pet(
     val id: Long,
     val name: String,
+    val imageUrl: String? = null,
 )
 
 data class CalendarDay(

@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.window.Dialog
 import com.tico.mypawday.ui.theme.MyPawDayDimens
 
@@ -26,7 +26,8 @@ fun BaseConfirmDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val density = LocalDensity.current
+    val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
     val dimens = MyPawDayDimens.dialog(screenWidth)
 
     Dialog(onDismissRequest = onDismiss) {
